@@ -10,5 +10,6 @@ lazy val root = (project in file(".")).
     name := "xis-extractor",
     libraryDependencies += scalaTest % Test,
     libraryDependencies += "org.apache.pdfbox" % "pdfbox" % "2.0.12",
-    libraryDependencies += "org.apache.poi" % "poi" % "4.0.0"
+    libraryDependencies += "org.apache.poi" % "poi" % "4.0.0",
+    libraryDependencies += "commons-io" % "commons-io" % "2.5"
   )
