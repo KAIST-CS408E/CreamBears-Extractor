@@ -1,6 +1,6 @@
 package services.xis.extractor
 
-import java.io.{File, IOException, InputStream, ByteArrayInputStream}
+import java.io.{File, InputStream, ByteArrayInputStream}
 
 import kr.dogfoot.hwplib.`object`.HWPFile
 import kr.dogfoot.hwplib.reader.HWPReader
@@ -12,12 +12,7 @@ object HWPExtractor extends GenExtractor {
 
   private def extract(hwp: HWPFile): String = TextExtractor.extract(hwp, tem)
 
-  def extract(name: String): String =
-    try {
-      extract(HWPReader.fromFile(name))
-    } catch {
-      case _: IOException => ""
-    }
+  def extract(name: String): String = extract(HWPReader.fromFile(name))
   def extract(f: File): String = extract(f.getAbsolutePath)
   def extract(is: InputStream): String = extract(HWPReader.fromInputStream(is))
   def extract(arr: Array[Byte]): String = extract(new ByteArrayInputStream(arr))

@@ -16,8 +16,13 @@ class CrawlSpec extends FlatSpec with Matchers {
   private val hKey = "2019년 KAIST 동남아시아 봉사단 파견 안내"
   private val hLen = 1401
 
-  test("pdf", pdf, PDFExtractor, pKey, pLen)
-  test("hwp", hwp, HWPExtractor, hKey, hLen)
+  private val img = "res/test.jpg"
+  private val iKey = ""
+  private val iLen = 0
+
+  test("PDF", pdf, PDFExtractor, pKey, pLen)
+  test("HWP", hwp, HWPExtractor, hKey, hLen)
+  test("Image", img, ImageExtractor, iKey, iLen)
 
   def test(typ: String, name: String, e: GenExtractor, key: String, len: Int) {
     def check(text: String): Unit = {

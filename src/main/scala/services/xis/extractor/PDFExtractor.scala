@@ -1,6 +1,6 @@
 package services.xis.extractor
 
-import java.io.{File, IOException, InputStream}
+import java.io.{File, InputStream}
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
@@ -17,12 +17,7 @@ object PDFExtractor extends GenExtractor {
     text
   }
 
-  def extract(name: String): String =
-    try {
-      extract(new File(name))
-    } catch {
-      case _: IOException => ""
-    }
+  def extract(name: String): String = extract(new File(name))
   def extract(f: File): String = extract(PDDocument.load(f))
   def extract(is: InputStream): String = extract(PDDocument.load(is))
   def extract(arr: Array[Byte]): String = extract(PDDocument.load(arr))
