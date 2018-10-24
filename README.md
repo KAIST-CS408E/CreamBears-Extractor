@@ -12,8 +12,15 @@ lazy val root = (project in file("."))
 ```
 * Example
 ```scala
-import services.xis.extractor.{PDFExtractor, HWPExtractor}
+import services.xis.extractor.Extractor
 
-val textPDF: String = PDFExtractor.extract("test.pdf")
-val textHWP: String = HWPExtractor.extract("test.hwp")
+val textPDF: String = Extractor.extract("test.pdf")
+val textHWP: String = Extractor.extract("test.hwp")
+val textDOC: String = Extractor.extract("test.doc")
+val textDOCX: String = Extractor.extract("test.docx")
+val textXLS: String = Extractor.extract("test.xls")
+val textXLSX: String = Extractor.extract("test.xlsx")
+val textJPG: String = Extractor.extract("test.jpg")
+val textJPEG: String = Extractor.extract("test.jpeg")
+val textPNG: String = Extractor.extract("test.png")
 ```
