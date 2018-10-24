@@ -20,33 +20,48 @@ class CrawlSpec extends FlatSpec with Matchers {
   private val iKey = ""
   private val iLen = 0
 
-  test("PDF", pdf, PDFExtractor, pKey, pLen)
-  test("HWP", hwp, HWPExtractor, hKey, hLen)
-  test("Image", img, ImageExtractor, iKey, iLen)
+  private val xlsx = "res/test.xlsx"
+  private val xxKey = "겨울계절학기 개설과목 및 수업시간표(타교)"
+  private val xxLen = 8878
 
-  def test(typ: String, name: String, e: GenExtractor, key: String, len: Int) {
+  private val doc = "res/test.doc"
+  private val dKey = "2018 Daewoong Foundation AI(Artificial Intelligence) Based Healthcare"
+  private val dLen = 3302
+
+  private val docx = "res/test.docx"
+  private val dxKey = "2018년도 대웅재단 AI 기반 헬스케어 분야 대학원생 연구지원 공모 안내문"
+  private val dxLen = 1182
+
+  test("PDF", pdf, pKey, pLen)
+  test("HWP", hwp, hKey, hLen)
+  test("Image", img, iKey, iLen)
+  test("XLSX", xlsx, xxKey, xxLen)
+  test("DOC", doc, dKey, dLen)
+  test("DOCX", docx, dxKey, dxLen)
+
+  def test(typ: String, name: String, key: String, len: Int) {
     def check(text: String): Unit = {
       text.contains(key) shouldEqual true
       text.length shouldEqual len
     }
 
     s"$typ file" should "be read by name" in {
-      check(e.extract(name))
+      check(Extractor.extract(name))
     }
 
     s"$typ file" should "be read by file" in {
-      check(e.extract(new File(name)))
+      check(Extractor.extract(new File(name)))
     }
 
     s"$typ file" should "be read by stream" in {
       val fis = new FileInputStream(new File(name))
-      check(e.extract(fis))
+      check(Extractor.extract(name, fis))
       fis.close
     }
 
     s"$typ file" should "be read by array" in {
       val fis = new FileInputStream(new File(name))
-      check(e.extract(IOUtils.toByteArray(fis)))
+      check(Extractor.extract(name, IOUtils.toByteArray(fis)))
       fis.close
     }
   }
