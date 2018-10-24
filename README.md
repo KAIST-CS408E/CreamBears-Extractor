@@ -1,4 +1,4 @@
-#xIS-Extractor
+# xIS-Extractor
 ## How to use
 * Add the following line to your `project/Dependencies` file.
 ```scala
