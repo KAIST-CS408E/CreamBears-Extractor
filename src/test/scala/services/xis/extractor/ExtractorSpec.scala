@@ -39,6 +39,12 @@ class CrawlSpec extends FlatSpec with Matchers {
   test("DOC", doc, dKey, dLen)
   test("DOCX", docx, dxKey, dxLen)
 
+  "Extensions" should "be proper" in {
+    List("hwp", "pdf", "jpg", "jpeg", "png", "xls", "xlsx", "doc", "docx")
+      .map("." + _)
+      .foreach(Extractor.available(_) shouldEqual true)
+  }
+
   def test(typ: String, name: String, key: String, len: Int) {
     def check(text: String): Unit = {
       text.contains(key) shouldEqual true
