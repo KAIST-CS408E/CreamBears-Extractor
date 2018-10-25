@@ -21,85 +21,64 @@ import kr.dogfoot.hwplib.reader.HWPReader
 import kr.dogfoot.hwplib.tool.textextractor.TextExtractMethod
 import kr.dogfoot.hwplib.tool.textextractor.TextExtractor
 
-object HWPExtractor extends GenExtractor {
-  type T = HWPFile
-
-  private[extractor] def _extract(hwp: T): String = TextExtractor.extract(hwp, tem)
-  private[extractor] def toT(is: InputStream): T = HWPReader.fromInputStream(is)
-  private[extractor] val extensions: Set[String] = Set("hwp")
+object HWPExtractor extends GenExtractor("hwp") {
+  private[extractor] def _extract(is: InputStream): String =
+    TextExtractor.extract(HWPReader.fromInputStream(is), tem)
 
   private val tem = TextExtractMethod.InsertControlTextBetweenParagraphText
 }
 
-object PDFExtractor extends GenExtractor {
-  type T = PDDocument
-
-  private[extractor] def _extract(doc: T): String = {
+object PDFExtractor extends GenExtractor("pdf") {
+  private[extractor] def _extract(is: InputStream): String = {
+    val doc = PDDocument.load(is)
     val text = stripper.getText(doc);
     doc.close
     text
   }
-  private[extractor] def toT(is: InputStream): T = PDDocument.load(is)
-  private[extractor] val extensions: Set[String] = Set("pdf")
 
   private val stripper = new PDFTextStripper
   Logger.getLogger("org.apache.pdfbox").setLevel(Level.OFF)
 }
 
-object ImageExtractor extends GenExtractor {
-  type T = Array[Byte]
+object ImageExtractor extends GenExtractor("jpg", "jpeg", "png") {
+  private[extractor] def _extract(is: InputStream): String =
+    extract(IOUtils.toByteArray(is))
 
-  private[extractor] def _extract(arr: T): String = JImageExtractor.extract(arr)
-  private[extractor] def toT(is: InputStream): T = IOUtils.toByteArray(is)
-  private[extractor] val extensions: Set[String] = Set("jpg", "jpeg", "png")
-
-  override def extract(arr: Array[Byte]): String = _extract(arr)
+  override def extract(arr: Array[Byte]): String = JImageExtractor.extract(arr)
 }
 
-object XLSExtractor extends GenExtractor {
-  type T = POIFSFileSystem
-
-  private[extractor] def _extract(fs: T): String =  {
+object XLSExtractor extends GenExtractor("xls") {
+  private[extractor] def _extract(is: InputStream): String =  {
+    val fs = new POIFSFileSystem(is)
     val text = new ExcelExtractor(fs).getText
     fs.close
     text
   }
-  private[extractor] def toT(is: InputStream): T = new POIFSFileSystem(is)
-  private[extractor] val extensions: Set[String] = Set("xls")
 }
 
-object XLSXExtractor extends GenExtractor {
-  type T = XSSFWorkbook
-
-  private[extractor] def _extract(wb: T): String =  {
+object XLSXExtractor extends GenExtractor("xlsx") {
+  private[extractor] def _extract(is: InputStream): String =  {
+    val wb = new XSSFWorkbook(is)
     val text = new XSSFExcelExtractor(wb).getText
     wb.close
     text
   }
-  private[extractor] def toT(is: InputStream): T = new XSSFWorkbook(is)
-  private[extractor] val extensions: Set[String] = Set("xlsx")
 }
 
-object DOCExtractor extends GenExtractor {
-  type T = POIFSFileSystem
-
-  private[extractor] def _extract(fs: T): String =  {
+object DOCExtractor extends GenExtractor("doc") {
+  private[extractor] def _extract(is: InputStream): String =  {
+    val fs = new POIFSFileSystem(is)
     val text = new WordExtractor(fs).getText
     fs.close
     text
   }
-  private[extractor] def toT(is: InputStream): T = new POIFSFileSystem(is)
-  private[extractor] val extensions: Set[String] = Set("doc")
 }
 
-object DOCXExtractor extends GenExtractor {
-  type T = XWPFDocument
-
-  private[extractor] def _extract(wb: T): String =  {
-    val text = new XWPFWordExtractor(wb).getText
-    wb.close
+object DOCXExtractor extends GenExtractor("docx") {
+  private[extractor] def _extract(is: InputStream): String =  {
+    val doc = new XWPFDocument(is)
+    val text = new XWPFWordExtractor(doc).getText
+    doc.close
     text
   }
-  private[extractor] def toT(is: InputStream): T = new XWPFDocument(is)
-  private[extractor] val extensions: Set[String] = Set("docx")
 }
