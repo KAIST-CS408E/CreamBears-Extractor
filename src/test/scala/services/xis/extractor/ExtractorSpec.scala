@@ -32,15 +32,21 @@ class CrawlSpec extends FlatSpec with Matchers {
   private val dxKey = "2018년도 대웅재단 AI 기반 헬스케어 분야 대학원생 연구지원 공모 안내문"
   private val dxLen = 1182
 
+  private val pptx = "res/test.pptx"
+  private val pxKey = "Global Challenge 개요"
+  private val pxLen = 1383
+
   test("PDF", pdf, pKey, pLen)
   test("HWP", hwp, hKey, hLen)
   test("Image", img, iKey, iLen)
   test("XLSX", xlsx, xxKey, xxLen)
   test("DOC", doc, dKey, dLen)
   test("DOCX", docx, dxKey, dxLen)
+  test("PPTX", pptx, pxKey, pxLen)
 
   "Extensions" should "be proper" in {
-    List("hwp", "pdf", "jpg", "jpeg", "png", "xls", "xlsx", "doc", "docx")
+    List("hwp", "pdf", "jpg", "jpeg", "png",
+      "xls", "xlsx", "doc", "docx", "ppt", "pptx")
       .map("." + _)
       .foreach(Extractor.available(_) shouldEqual true)
   }

@@ -13,6 +13,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.hwpf.extractor.WordExtractor
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor
 import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.sl.extractor.SlideShowExtractor
+import org.apache.poi.hslf.usermodel.HSLFSlideShow
+import org.apache.poi.xslf.usermodel.XMLSlideShow
 
 import org.apache.commons.io.IOUtils
 
@@ -79,6 +82,24 @@ object DOCXExtractor extends GenExtractor("docx") {
     val doc = new XWPFDocument(is)
     val text = new XWPFWordExtractor(doc).getText
     doc.close
+    text
+  }
+}
+
+object PPTExtractor extends GenExtractor("ppt") {
+  private[extractor] def _extract(is: InputStream): String =  {
+    val ss = new HSLFSlideShow(is)
+    val text = new SlideShowExtractor(ss).getText
+    ss.close
+    text
+  }
+}
+
+object PPTXExtractor extends GenExtractor("pptx") {
+  private[extractor] def _extract(is: InputStream): String =  {
+    val ss = new XMLSlideShow(is)
+    val text = new SlideShowExtractor(ss).getText
+    ss.close
     text
   }
 }
