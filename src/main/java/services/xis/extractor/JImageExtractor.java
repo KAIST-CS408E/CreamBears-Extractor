@@ -29,11 +29,12 @@ class JImageExtractor {
 
             for (AnnotateImageResponse res : responses) {
                 if (res.hasError()) {
-                    System.out.printf("Error: %s\n", res.getError().getMessage());
+                    System.err.printf("Error: %s\n", res.getError().getMessage());
                 }
-                for (EntityAnnotation annotation : res.getTextAnnotationsList()) {
-                    result += annotation.getDescription();
-                }
+                if (res.getTextAnnotationsList().size() > 0)
+                    return res.getTextAnnotationsList().get(0).getDescription();
+                else
+                    return "";
             }
             return result;
         }
