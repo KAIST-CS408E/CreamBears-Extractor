@@ -10,6 +10,10 @@ lazy val root = (project in file("."))
   .dependsOn(extractor)
   .settings(...)
 ```
+* Set GCP credential file path as an environment variable
+```shell
+$ export GOOGLE_APPLICATION_CREDENTIALS=[PATH_TO_KEY_FILE]
+```
 * Example
 ```scala
 import services.xis.extractor.Extractor
