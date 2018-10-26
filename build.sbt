@@ -13,5 +13,6 @@ lazy val root = (project in file(".")).
     libraryDependencies += "org.apache.poi" % "poi" % "4.0.0",
     libraryDependencies += "org.apache.poi" % "poi-ooxml" % "4.0.0",
     libraryDependencies += "org.apache.poi" % "poi-scratchpad" % "4.0.0",
-    libraryDependencies += "commons-io" % "commons-io" % "2.6"
+    libraryDependencies += "commons-io" % "commons-io" % "2.6",
+    libraryDependencies += "com.google.cloud" % "google-cloud-vision" % "1.48.0"
   )
