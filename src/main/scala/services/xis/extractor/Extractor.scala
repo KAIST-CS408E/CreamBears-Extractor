@@ -12,7 +12,8 @@ object Extractor {
     DOCExtractor,
     DOCXExtractor,
     PPTExtractor,
-    PPTXExtractor
+    PPTXExtractor,
+    ZIPExtractor
   )
   private val extensions: Set[String] =
     extractors.flatMap(_.extensions).toSet

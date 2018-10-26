@@ -1,7 +1,9 @@
 package services.xis.extractor
 
 import java.io.InputStream
+import java.nio.charset.Charset
 import java.util.logging.{Logger, Level}
+import java.util.zip.{ZipInputStream, ZipEntry}
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
@@ -100,6 +102,26 @@ object PPTXExtractor extends GenExtractor("pptx") {
     val ss = new XMLSlideShow(is)
     val text = new SlideShowExtractor(ss).getText
     ss.close
+    text
+  }
+}
+
+object ZIPExtractor extends GenExtractor("zip") {
+  private val charset = Charset.forName("CP437");
+
+  private[extractor] def _extract(is: InputStream): String =  {
+    val zis = new ZipInputStream(is, charset)
+
+    def getTexts(z: ZipInputStream): List[String] = {
+      val entry = z.getNextEntry
+      if (entry == null) Nil
+      else
+        Extractor.extract(entry.getName, IOUtils.toByteArray(z)) :: getTexts(z)
+    }
+
+    val text = getTexts(zis).mkString("\n")
+    zis.closeEntry
+    zis.close
     text
   }
 }
